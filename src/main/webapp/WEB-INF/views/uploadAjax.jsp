@@ -52,9 +52,10 @@ $(document).ready(function(){
 			processData : false, 
 			contentType : false, 
 			data : formData, 
-			type : 'POST', 
+			type : 'POST',
+			dataType: 'json', 
 			sucess : function(result){
-				alert('Uploaded'); 
+				console.log(result) 
 			}
 		})
 	}); 
