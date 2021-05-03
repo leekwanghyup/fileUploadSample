@@ -36,7 +36,36 @@ public class UploadController {
 				System.out.println(e.getMessage());
 			}  // try end 
 		} // for end 
+	}
+	
+	@GetMapping("/uploadAjax")
+	public void uploadAjax() {
+		System.out.println("upload Ajajx");
+	}
+	
+	@PostMapping("/uploadAjaxAction")
+	public void uploadAjaxPost(MultipartFile[] uploadFile) {
 		
+		String uploadFolder = "C:\\upload"; 
 		
+		for(MultipartFile multipartFile : uploadFile) {
+			System.out.println("---------------------------------");
+			System.out.println("Upload File Name : " + multipartFile.getOriginalFilename());
+			System.out.println("Upload File Size : " + multipartFile.getSize());
+			
+			String uploadFileName = multipartFile.getOriginalFilename();
+			// IE file path 
+			uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("\\")+1); 
+			
+			File saveFile = new File(uploadFolder, uploadFileName);
+			
+			try {
+				multipartFile.transferTo(saveFile);
+			} catch (IllegalStateException e) {
+				System.out.println(e.getMessage());
+			} catch (IOException e) {
+				System.out.println(e.getMessage());
+			}  // try end 
+		} // for end 
 	}
 }
