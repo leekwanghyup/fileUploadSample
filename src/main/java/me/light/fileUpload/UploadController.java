@@ -2,6 +2,8 @@ package me.light.fileUpload;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -47,6 +49,10 @@ public class UploadController {
 	public void uploadAjaxPost(MultipartFile[] uploadFile) {
 		
 		String uploadFolder = "C:\\upload"; 
+		File uploadPath = new File(uploadFolder, getFolder()); 
+		if(uploadPath.exists() == false) {
+			uploadPath.mkdirs(); 
+		}
 		
 		for(MultipartFile multipartFile : uploadFile) {
 			System.out.println("---------------------------------");
@@ -57,7 +63,7 @@ public class UploadController {
 			// IE file path 
 			uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("\\")+1); 
 			
-			File saveFile = new File(uploadFolder, uploadFileName);
+			File saveFile = new File(uploadPath, uploadFileName);
 			
 			try {
 				multipartFile.transferTo(saveFile);
@@ -67,5 +73,12 @@ public class UploadController {
 				System.out.println(e.getMessage());
 			}  // try end 
 		} // for end 
+	}
+	
+	private String getFolder() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = new Date(); 
+		String str = sdf.format(date); 
+		return str.replace("-", File.separator);
 	}
 }
