@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -59,7 +60,8 @@ public class UploadController {
 			System.out.println("Upload File Name : " + multipartFile.getOriginalFilename());
 			System.out.println("Upload File Size : " + multipartFile.getSize());
 			
-			String uploadFileName = multipartFile.getOriginalFilename();
+			UUID uuid = UUID.randomUUID(); // UUID를 이용하여 file이름 생성  
+			String uploadFileName = uuid.toString() + "_" + multipartFile.getOriginalFilename();
 			// IE file path 
 			uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("\\")+1); 
 			
