@@ -1,7 +1,10 @@
 package me.light.fileUpload;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.FileNameMap;
+import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
@@ -11,6 +14,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
+
+import net.coobird.thumbnailator.Thumbnailator;
 
 @Controller
 public class UploadController {
@@ -69,6 +74,13 @@ public class UploadController {
 			
 			try {
 				multipartFile.transferTo(saveFile);
+				// 이미지 여부 확인 후 썸네일 생성 
+				if(checkImageType(saveFile)) {
+					File thumbImg = new File(uploadPath, "s_"+ uploadFileName); 
+					FileOutputStream thumbnail = new FileOutputStream(thumbImg); 
+					Thumbnailator.createThumbnail(multipartFile.getInputStream(), thumbnail, 100, 100); 
+					thumbnail.close(); 
+				}
 			} catch (IllegalStateException e) {
 				System.out.println(e.getMessage());
 			} catch (IOException e) {
@@ -82,5 +94,11 @@ public class UploadController {
 		Date date = new Date(); 
 		String str = sdf.format(date); 
 		return str.replace("-", File.separator);
+	}
+	
+	private boolean checkImageType(File file) {
+		FileNameMap fileNameMap = URLConnection.getFileNameMap();
+		String contentType = fileNameMap.getContentTypeFor(file.getName()); 
+		return contentType.startsWith("image"); 
 	}
 }

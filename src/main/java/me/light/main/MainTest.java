@@ -1,6 +1,8 @@
 package me.light.main;
 
 import java.io.File;
+import java.net.FileNameMap;
+import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -19,6 +21,13 @@ public class MainTest {
 		String uploadFolder = "C:\\upload"; 
 		File uploadPath = new File(uploadFolder, getFolder());
 		System.out.println(uploadPath); // 당일 날짜로 폴더 생성 C:\\upload\\2021\\05\\03
+		
+		// 해당 파일이 이미지 파일인지 여부 
+		File file = new File("C:\\Users\\Public\\Pictures\\Sample Pictures\\국화.jpg"); 
+		FileNameMap fileNameMap = URLConnection.getFileNameMap();
+		String contentType = fileNameMap.getContentTypeFor(file.getName());
+		System.out.println(contentType);
+		System.out.println(contentType.startsWith(contentType));
 	}
 	
 }
