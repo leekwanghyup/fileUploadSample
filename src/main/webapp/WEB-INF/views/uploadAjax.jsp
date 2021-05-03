@@ -33,6 +33,7 @@ $(document).ready(function(){
 	    return true; 
 	}
 	
+	var cloneObj = $(".uploadDiv").clone(); //초기화를 위해 복사
 	
 	$("#uploadBtn").on("click",function(e){
 		var formData = new FormData(); 
@@ -48,14 +49,14 @@ $(document).ready(function(){
 		}
 		
 		$.ajax({
-			url: 'uploadAjaxAction', 
+			url: '/uploadAjaxAction', 
 			processData : false, 
 			contentType : false, 
 			data : formData, 
 			type : 'POST',
 			dataType: 'json', 
-			sucess : function(result){
-				console.log(result) 
+			success : function(result){ 
+				$(".uploadDiv").html(cloneObj.html());  
 			}
 		})
 	}); 
