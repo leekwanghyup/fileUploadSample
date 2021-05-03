@@ -14,6 +14,9 @@
 	<input type="file" name="uploadFile" multiple="multiple"/>
 	<button id="uploadBtn">Upload</button>
 </div>	
+<div class="uploadResult">
+	<ul></ul>
+</div>
 <script>
 $(document).ready(function(){
 	
@@ -55,12 +58,24 @@ $(document).ready(function(){
 			data : formData, 
 			type : 'POST',
 			dataType: 'json', 
-			success : function(result){ 
+			success : function(result){
+				showUploadedFile(result);  
 				$(".uploadDiv").html(cloneObj.html());  
 			}
-		})
+		}); 
 	}); 
+	
+	var uploadResult = $(".uploadResult ul"); 
+	function showUploadedFile(uploadResultArr){
+		var str = ""; 
+		$(uploadResultArr).each(function(i,obj){
+			str += "<li>" + obj.fileName + "</li>"; 
+		}); 
+		uploadResult.html(str);   
+	}
+	
 }); 
 </script>
+
 </body>
 </html>
