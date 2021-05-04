@@ -6,6 +6,28 @@
 <meta charset="UTF-8">
 <title>Ajax 방식 파일업로드</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<style type="text/css">
+.uploadResult {
+	width: 100%; 
+	background-color: gray;  
+}
+
+.uploadResult .files {
+	display: flex; 
+	flex-flow: row; 
+	justify-content: center;
+	align-items: center;
+}
+
+.uploadResult .list {
+	list-style: none; 
+	padding: 10px; 
+}
+
+.uploadResult .images {
+	width: 20px; 
+}
+</style>
 </head>
 <body>
 <h1>Ajax 방식 파일업로드</h1>
@@ -68,8 +90,14 @@ $(document).ready(function(){
 	var uploadResult = $(".uploadResult ul"); 
 	function showUploadedFile(uploadResultArr){
 		var str = ""; 
-		$(uploadResultArr).each(function(i,obj){
-			str += "<li>" + obj.fileName + "</li>"; 
+		$(uploadResultArr).each(function(i,obj){ // 여기서 ojb는 AttachDTO객체이다. 
+			console.log(obj); 
+			if(!obj.image){
+				str += "<li class='list'><img class='images' src='/resources/img/attach.png'>"+obj.fileName+"</li>";
+			} else{
+				var fileCallPath = encodeURIComponent(obj.uploadPath + "/s_" + obj.uuid + "_" + obj.fileName);
+				str += "<li class='list'><img src='/display?fileName="+ fileCallPath  +"'></li>";
+			} 
 		}); 
 		uploadResult.html(str);   
 	}
