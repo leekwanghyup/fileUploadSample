@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.FileNameMap;
 import java.net.URLConnection;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -170,6 +171,26 @@ public class UploadController {
 		} 
 		return new ResponseEntity<Resource>(resource,headers,HttpStatus.OK); 
 	}
+	
+	// 첨부파일 삭제 삭리 
+	@PostMapping("deleteFile")
+	@ResponseBody
+	 public ResponseEntity<String> deleteFile(String fileName, String type){
+		 File file; 
+		 try {
+			file = new File("c:\\upload\\"+URLDecoder.decode(fileName,"UTF-8"));
+			file.delete(); 
+			if(type.equals("image")) { // 썸네일 이미지 삭제 
+				String largeFileName = file.getAbsolutePath().replace("s_","");
+				file = new File(largeFileName); 
+				file.delete(); 
+			}
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>(HttpStatus.NOT_FOUND); 
+		} 
+		 return new ResponseEntity<String>("deleted", HttpStatus.OK); 
+	 }
 	
 	private String getFolder() {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

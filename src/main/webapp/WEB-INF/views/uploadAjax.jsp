@@ -52,6 +52,11 @@
 	width: 600px; 
 }
 
+.uploadResult ul li span{
+	color: #fff; 
+	cursor:pointer; 
+}
+
 
 </style>
 </head>
@@ -125,8 +130,13 @@ $(document).ready(function(){
 			console.log(obj); 
 			if(!obj.image){
 				var fileCallPath = encodeURIComponent(obj.uploadPath + "/" + obj.uuid + "_"+obj.fileName); // 다운로드 경로 
-				str += "<li class='list'><a href='/download?fileName="+fileCallPath+"'>";  // a 태그 추가 
-				str += "<li class='list'><img class='images' src='/resources/img/attach.png'>"+obj.fileName+"</li>";
+				
+				var fileLink = fileCallPath.replace(new RegExp(/\\/g), "/"); 
+				
+				str += "<li class='list'><div><a href='/download?fileName="+fileCallPath+"'>";  // a 태그 추가 
+				str += "<img class='images' src='/resources/img/attach.png'>"+obj.fileName+"</a>";
+				str += "<span data-file=\'" + fileCallPath + "\'data-type='file'> 삭제 </span></div></li>"; 
+				
 			} else{	
 				var fileCallPath = encodeURIComponent(obj.uploadPath + "/s_" + obj.uuid + "_" + obj.fileName);
 				
@@ -134,7 +144,8 @@ $(document).ready(function(){
 				var originPath = obj.uploadPath + "\\" + obj.uuid + "_" + obj.fileName;  
 				originPath = originPath.replace(new RegExp(/\\/g), "/"); 
 				str += "<li class=\"list\"><a href=\"javascript:showImage(\'"+ originPath +"\')\">"
-	            str += "<img src='/display?fileName="+ fileCallPath  +"'></a></li>";
+	            str += "<img src='/display?fileName="+ fileCallPath  +"'></a>";
+	            str += "<span data-file=\'" +fileCallPath +"\' data-type='image'>삭제</span></li>"
 			} 
 		}); 
 		uploadResult.html(str);   
@@ -147,6 +158,23 @@ $(document).ready(function(){
 			$(this).hide(); 
 		},100); 
 	}); 
+	
+	// 삭제 처리 이벤트 
+	 $(".uploadResult").on("click", "span", function(e){
+		 var targetFile = $(this).data("file"); 
+		 var type = $(this).data("type"); 
+		 console.log(targetFile);
+		 
+		 $.ajax({
+			 url : "/deleteFile", 
+			 data : {fileName: targetFile, type:type}, 
+			 dataType : "text", 
+			 type : "post", 
+			 success : function(result){
+				 alert(result);
+			 }
+		 }); 
+	 })
 }); 
 
 function showImage(fileCallPath){
