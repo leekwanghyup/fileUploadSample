@@ -93,8 +93,10 @@ $(document).ready(function(){
 		$(uploadResultArr).each(function(i,obj){ // 여기서 ojb는 AttachDTO객체이다. 
 			console.log(obj); 
 			if(!obj.image){
+				var fileCallPath = encodeURIComponent(obj.uploadPath + "/" + obj.uuid + "_"+obj.fileName); // 다운로드 경로 
+				str += "<li class='list'><a href='/download?fileName="+fileCallPath+"'>";  // a 태그 추가 
 				str += "<li class='list'><img class='images' src='/resources/img/attach.png'>"+obj.fileName+"</li>";
-			} else{
+			} else{	
 				var fileCallPath = encodeURIComponent(obj.uploadPath + "/s_" + obj.uuid + "_" + obj.fileName);
 				str += "<li class='list'><img src='/display?fileName="+ fileCallPath  +"'></li>";
 			} 
